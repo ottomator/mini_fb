@@ -675,12 +675,18 @@ module MiniFB
 
             return res_hash
         rescue RestClient::Exception => ex
+          if @@logging
             puts "ex.http_code=" + ex.http_code.to_s
-            puts 'ex.http_body=' + ex.http_body if @@logging
-            res_hash = JSON.parse(ex.http_body) # probably should ensure it has a good response
-            raise MiniFB::FaceBookError.new(ex.http_code, "#{res_hash["error"]["type"]}: #{res_hash["error"]["message"]}")
+            puts 'ex.http_body=' + ex.http_body
+          end
+          res_hash = JSON.parse(ex.http_body) rescue nil # probably should ensure it has a good response
+          if res_hash
+            msg = "#{res_hash["error"]["type"]}: #{res_hash["error"]["message"]}"
+          else
+            msg = "Unparseable Facebook response: #{ex.http_body}"
+          end
+          raise MiniFB::FaceBookError.new(ex.http_code, msg)
         end
-
     end
 
     # Returns all available scopes.
