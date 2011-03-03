@@ -556,11 +556,6 @@ module MiniFB
     def self.get(access_token, id, options={})
       
       params = options[:params] || {}
-      params["access_token"] = "#{(access_token)}"
-      params["metadata"] = "1" if options[:metadata]
-      params["fields"] = options[:fields].join(",") if options[:fields]
-      options[:params] = params
-
       if id.is_a? Enumerable
         url= "#{graph_base}"
         params["ids"] = id.join(",")
@@ -568,6 +563,11 @@ module MiniFB
         url = "#{graph_base}#{id}"
       end        
       url << "/#{options[:type]}" if options[:type]
+      
+      params["access_token"] = "#{(access_token)}"
+      params["metadata"] = "1" if options[:metadata]
+      params["fields"] = options[:fields].join(",") if options[:fields]
+      options[:params] = params
       
       return fetch(url, options)
     end
