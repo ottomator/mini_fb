@@ -555,18 +555,20 @@ module MiniFB
     #   - params: Any additional parameters you would like to submit
     def self.get(access_token, id, options={})
 
-      if id.is_a? Enumerable
-        url= "#{graph_base}?ids=#{id.join(",")}"
-      else
-        url = "#{graph_base}#{id}"
-        url << "/#{options[:type]}" if options[:type]
-      end        
       
       params = options[:params] || {}
       params["access_token"] = "#{(access_token)}"
       params["metadata"] = "1" if options[:metadata]
       params["fields"] = options[:fields].join(",") if options[:fields]
       options[:params] = params
+
+      url = "#{graph_base}#{id}"
+      if id.is_a? Enumerable
+        url= "#{graph_base}"
+        params["ids"] = id.join(",")
+      end        
+      url << "/#{options[:type]}" if options[:type]
+      
       return fetch(url, options)
     end
 
