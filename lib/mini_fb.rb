@@ -554,7 +554,6 @@ module MiniFB
     #   - metadata: to include metadata in response. true/false
     #   - params: Any additional parameters you would like to submit
     def self.get(access_token, id, options={})
-
       
       params = options[:params] || {}
       params["access_token"] = "#{(access_token)}"
@@ -562,8 +561,9 @@ module MiniFB
       params["fields"] = options[:fields].join(",") if options[:fields]
       options[:params] = params
 
-      url = "#{graph_base}#{id}"
-      if id.is_a? Enumerable
+      if id.is_a? Numeric
+        url = "#{graph_base}#{id}"
+      else
         url= "#{graph_base}"
         params["ids"] = id.join(",")
       end        
