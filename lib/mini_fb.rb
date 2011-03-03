@@ -554,14 +554,20 @@ module MiniFB
     #   - metadata: to include metadata in response. true/false
     #   - params: Any additional parameters you would like to submit
     def self.get(access_token, id, options={})
+
+      if id.is_a? Enumerable
+        url= "#{graph_base}#{id.join(",")}"
+      else
         url = "#{graph_base}#{id}"
         url << "/#{options[:type]}" if options[:type]
-        params = options[:params] || {}
-        params["access_token"] = "#{(access_token)}"
-        params["metadata"] = "1" if options[:metadata]
-        params["fields"] = options[:fields].join(",") if options[:fields]
-        options[:params] = params
-        return fetch(url, options)
+      end        
+      
+      params = options[:params] || {}
+      params["access_token"] = "#{(access_token)}"
+      params["metadata"] = "1" if options[:metadata]
+      params["fields"] = options[:fields].join(",") if options[:fields]
+      options[:params] = params
+      return fetch(url, options)
     end
 
     # Posts data to the Facebook Graph API
