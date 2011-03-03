@@ -561,11 +561,11 @@ module MiniFB
       params["fields"] = options[:fields].join(",") if options[:fields]
       options[:params] = params
 
-      if id.is_a? Numeric
-        url = "#{graph_base}#{id}"
-      else
+      if id.is_a? Enumerable
         url= "#{graph_base}"
         params["ids"] = id.join(",")
+      else
+        url = "#{graph_base}#{id}"
       end        
       url << "/#{options[:type]}" if options[:type]
       
