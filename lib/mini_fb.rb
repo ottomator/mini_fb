@@ -556,7 +556,7 @@ module MiniFB
     def self.get(access_token, id, options={})
 
       if id.is_a? Enumerable
-        url= "#{graph_base}#{id.join(",")}"
+        url= "#{graph_base}?ids=#{id.join(",")}"
       else
         url = "#{graph_base}#{id}"
         url << "/#{options[:type]}" if options[:type]
