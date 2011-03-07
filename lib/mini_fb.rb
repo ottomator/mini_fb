@@ -687,9 +687,11 @@ module MiniFB
             puts "ex.http_code=" + ex.http_code.to_s
             puts 'ex.http_body=' + ex.http_body
           end
-          res_hash = JSON.parse(ex.http_body) rescue nil # probably should ensure it has a good response
-          if (res_hash && res_hash.has_key?("error"))
+          res_hash = JSON.parse(ex.http_body) rescue {} # probably should ensure it has a good response
+          if res_hash.has_key?("error")
             msg = "#{res_hash["error"]["type"]}: #{res_hash["error"]["message"]}"
+          elsif res_hash.has_key?("error_code")
+            msg = "Unknown Facebook error (500 --> #{res_hash.inspect})"
           else
             msg = "Unparseable Facebook response: #{ex.http_body}"
           end
