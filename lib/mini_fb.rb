@@ -561,7 +561,7 @@ module MiniFB
       
       url = "#{graph_base}#{id}"
       url << "/#{options[:type]}" if options[:type]
-      
+      params = options[:params] || {}
       params["access_token"] = "#{(access_token)}"
       params["metadata"] = "1" if options[:metadata]
       params["fields"] = options[:fields].join(",") if options[:fields]
